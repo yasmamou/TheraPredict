@@ -17,7 +17,16 @@
       "Bash(git init:*)",
       "Bash(git add:*)",
       "Bash(git rm:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh repo:*)",
+      "Bash(npm run:*)",
+      "Bash(git push:*)",
+      "Bash(rm -f /Users/mamou/Projet/Theranostics/frontend/package-lock.json)",
+      "Bash(npm install:*)",
+      "Read(//usr/local/**)",
+      "Bash(nvm ls:*)",
+      "Bash(fnm ls:*)",
+      "Bash(git reset:*)"
     ]
   }
 }
