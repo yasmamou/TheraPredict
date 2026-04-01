@@ -20,27 +20,41 @@ export default function SimulatePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
+  // Try multiple API endpoints: local dev, then production backend
+  const API_URLS = [
+    '/api/v1/simulate/offline',
+    '/api/v1/simulate',
+    'http://localhost:8000/api/v1/simulate/offline',
+    'http://localhost:8000/api/v1/simulate',
+  ]
+
   const runSimulation = async (payload) => {
     setLoading(true)
     setError(null)
     try {
-      let res = await fetch('/api/v1/simulate/offline', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      if (!res.ok) {
-        res = await fetch('/api/v1/simulate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
+      let data = null
+      for (const url of API_URLS) {
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+          if (res.ok) {
+            data = await res.json()
+            break
+          }
+        } catch {
+          continue
+        }
       }
-      if (!res.ok) {
-        const detail = await res.json().catch(() => ({ detail: 'Unknown error' }))
-        throw new Error(detail.detail || `HTTP ${res.status}`)
+      if (!data) {
+        throw new Error(
+          'Simulation backend not available. ' +
+          'The simulation engine requires a running Python backend. ' +
+          'Run locally: PYTHONPATH=src python3 -m uvicorn theranostics.api.main:app --port 8000'
+        )
       }
-      const data = await res.json()
       setResult(data)
     } catch (err) {
       setError(err.message)
@@ -73,7 +87,15 @@ export default function SimulatePage() {
 
         <div style={S.rightPanel}>
           {error && (
-            <div style={S.error}><strong>Error:</strong> {error}</div>
+            <div style={S.error}>
+              <strong style={{display:'block',marginBottom:'8px'}}>Simulation unavailable</strong>
+              <p style={{margin:0,fontSize:'13px',lineHeight:1.6}}>{error}</p>
+              {error.includes('backend') && (
+                <div style={{marginTop:'12px',padding:'12px',background:'rgba(0,0,0,0.2)',borderRadius:'6px',fontSize:'12px',fontFamily:'monospace',color:'#94a3b8'}}>
+                  PYTHONPATH=src python3 -m uvicorn theranostics.api.main:app --port 8000
+                </div>
+              )}
+            </div>
           )}
 
           {loading && (
