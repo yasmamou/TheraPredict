@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/mamou/Projet/Theranostics/frontend/src -type f \\\\\\(-name *.jsx -o -name *.js -o -name *.tsx -o -name *.ts \\\\\\))",
+      "Bash(wc:*)",
+      "Bash(PYTHONPATH=src python -m pytest tests/test_v1_pipeline.py -x -v --tb=short)",
+      "Bash(PYTHONPATH=src python3 -m pytest tests/test_v1_pipeline.py -x -v --tb=short)",
+      "Bash(PYTHONPATH=src python3 -m pytest tests/benchmark/test_v1_benchmark.py -x -v --tb=short)",
+      "Bash(PYTHONPATH=src python3 -m pytest tests/ -x -v --tb=short)",
+      "Bash(curl -s http://localhost:8000/api/v1/targets)",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/simulate/offline -H \"Content-Type: application/json\" -d '{\"\"\"\"target\"\"\"\":\"\"\"\"PSMA\"\"\"\"}')",
+      "Bash(curl:*)",
+      "Bash(python3 -m json.tool)",
+      "Bash(pkill -f \"vite\")",
+      "WebFetch(domain:www.isomorphiclabs.com)",
+      "Bash(gh auth:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
